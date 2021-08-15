@@ -14,12 +14,13 @@ def index():
                                form=form)
     else:
         coordinates = get_location_destiny(destination)
-        if coordinates == 'ERROR: Address not find ':
+        if type(coordinates) is tuple:
+            result = get_distance(coordinates)
+        elif coordinates == 'ERROR: Address not find ':
             result = 'ERROR: Address not find'
         elif validations_mkad(coordinates) != 0:
             result = "The specified address is located inside the MKAD"
         else:
-            result = get_distance(coordinates)
-
+            result = 'ERROR: Address not find'
         return render_template('index.html',
                                form=form, result=result)
