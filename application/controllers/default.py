@@ -1,7 +1,7 @@
-from app import app
+from application import app
 from flask import render_template
-from app.controllers.functions import get_distance, validations_mkad, get_location_destiny
-from app.models.forms import GetCoordinates
+from application.controllers.functions import get_distance, validations_mkad, get_location_destiny
+from application.models.forms import GetCoordinates
 
 
 @app.route('/index', methods=["GET", "POST"])

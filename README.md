@@ -11,8 +11,17 @@ Install using pip:
 
 ##Run application
 
-   $ python run.py runserver
+To start the application, open the terminal at the root of the project and 
+run the code:
+
+    $ python run.py runserver
 
 
 ## Example
+
+This is the interface:
+
+The use is very simple, only writte a full address and click in Submit
+
+![img.png](application/static/img.png)
 
