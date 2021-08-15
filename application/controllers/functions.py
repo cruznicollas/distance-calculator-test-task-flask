@@ -1,15 +1,22 @@
 import requests
-from datetime import datetime
 from geopy import distance
+import logging
 
-logging = open('log.txt', 'w')
+log_format = '%(asctime)s:%(filename)s:%(message)s'
+
+logging.basicConfig(filename='distance_result.log',
+                    filemode='w',
+                    level=logging.INFO,
+                    format=log_format)
+logger = logging.getLogger('root')
+
 key = '47ec0d7d-ea0a-4a20-bcee-66b897ea33bb'  # Set your API Key
 
 
 def get_location_destiny(destination):
     """
     :param destination: Set a location to find
-    :return: Position of location
+    :return: Position of location in coordinates
     """
     url_api = f'https://geocode-maps.yandex.ru/1.x/?apikey={key}&geocode={destination}&format=json&sco=longlat'
     try:
@@ -23,12 +30,13 @@ def get_location_destiny(destination):
         coord.append(coord2)
         return tuple(coord)
     except:
+        logger.warning('ERROR: Address not find')
         return 'ERROR: Address not find'
     finally:
         pass
 
 
-def validations_mkad(destination):
+def validations_mkad(destination):  # Function to validate if destination is in inside MKAD
     url_api = f'https://geocode-maps.yandex.ru/1.x/?apikey={key}&geocode={destination}' \
               f'&bbox=37.578,55.773~37.669,55.760&format=json&lang=en_US&rspn=1'
     data_request = requests.get(url_api).json()
@@ -38,9 +46,12 @@ def validations_mkad(destination):
 
 
 def get_distance(destination):
-    result = distance.distance(get_location_destiny('Moscow Ring Road'), get_location_destiny(destination)).km
-    print(result)
+    """
+    :param destination: Value received for web interface, for calculate the distance between point.
+    :return: Distance in kilometers
+    """
+    coord1 = (37.623429, 55.766557)
+    coord2 = get_location_destiny(destination)
+    result = distance.distance(coord1, coord2).km
+    logger.info(f'The distance between the coordinates {coord1} and {coord2} is {result:.2f}')
     return result
-
-
-print(validations_mkad(get_location_destiny('Moscow Ring Road')))

@@ -9,7 +9,7 @@ from app.models.forms import GetCoordinates
 def index():
     form = GetCoordinates()
     destination = form.destiny.data
-    if destination is None:
+    if destination is None or destination.isspace():
         return render_template('index.html',
                                form=form)
     else:
